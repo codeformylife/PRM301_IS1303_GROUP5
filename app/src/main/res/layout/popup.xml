@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Pop up hiển thị xóa bài hát-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/btnDelete"
+        android:layout_width="match_parent"
+        android:layout_height="91dp"
+        android:layout_weight="1"
+        android:drawableLeft="@drawable/ic_rubbish_bin"
+        android:onClick="deleteSong"
+        android:paddingLeft="20dp"
+        android:paddingRight="230dp"
+        android:text="Xóa bài hát" />
+</LinearLayout>
