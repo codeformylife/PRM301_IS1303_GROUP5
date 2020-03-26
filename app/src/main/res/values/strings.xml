@@ -4,4 +4,6 @@
     <string name="title_activity_main">Main</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="search">Tìm kiếm</string>
+    <string name="defaultTime">00:00</string>
 </resources>
