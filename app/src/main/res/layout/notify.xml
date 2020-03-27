@@ -1,102 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.flexbox.FlexboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <TextView
-        android:id="@+id/songNameNoti"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:text="Sample song"
-        android:textColor="#fff"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    android:layout_height="wrap_content"
+    android:padding="10dp"
 
-    <SeekBar
-        android:id="@+id/timeLineNoti"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginRight="5dp"
-        app:layout_constraintTop_toTopOf="parent" />
+    >
 
     <com.google.android.flexbox.FlexboxLayout
-        android:id="@+id/timelineboxNoti"
+        android:id="@+id/item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:background="#ffffff"
         app:alignContent="stretch"
         app:alignItems="center"
         app:flexWrap="wrap"
         app:justifyContent="space_between"
-        app:layout_alignSelf="center"
-        app:layout_constraintTop_toBottomOf="@id/timeLineNoti">
+        app:layout_alignSelf="center">
 
-        <TextView
-            android:id="@+id/timePlayNoti"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="@string/defaultTime"
-            android:textColor="#ffffff" />
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@mipmap/avatar_foreground" />
 
-        <TextView
-            android:id="@+id/timeEndNoti"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:text="@string/defaultTime"
-            android:textColor="#ffffff" />
+        <com.google.android.flexbox.FlexboxLayout
+            android:layout_width="290dp"
+            android:layout_height="100dp"
+            android:padding="10dp"
+            app:alignContent="stretch"
+            app:flexDirection="column"
+            app:justifyContent="space_between"
+            app:layout_constraintTop_toBottomOf="@id/item">
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:alignItems="center"
+                app:justifyContent="space_between">
+
+                <TextView
+                    android:layout_width="230dp"
+                    android:layout_height="wrap_content"
+                    android:text="Name bai hat"
+                    android:textColor="#000"
+                    android:textSize="23dp"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@mipmap/delete_foreground"></ImageButton>
+            </com.google.android.flexbox.FlexboxLayout>
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:alignContent="stretch"
+                app:alignItems="center"
+                app:flexWrap="wrap"
+                app:justifyContent="space_between"
+                app:layout_alignSelf="center">
+                <ImageButton
+                    android:id="@+id/btnMixNoti"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@mipmap/suffle_foreground" />
+
+                <ImageButton
+                    android:id="@+id/btnPreviousNoti"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@mipmap/previous_foreground" />
+
+                <ImageButton
+                    android:id="@+id/btnPlayPauseNoti"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="@mipmap/play_foreground" />
+
+                <ImageButton
+                    android:id="@+id/btnNextNoti"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@mipmap/next_foreground" />
+
+                <ImageButton
+                    android:id="@+id/btnLoopNoti"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@mipmap/reqeat_foreground" />
+
+
+            </com.google.android.flexbox.FlexboxLayout>
+        </com.google.android.flexbox.FlexboxLayout>
+
     </com.google.android.flexbox.FlexboxLayout>
-
-    <com.google.android.flexbox.FlexboxLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:padding="10dp"
-        app:alignContent="stretch"
-        app:alignItems="center"
-        app:flexWrap="wrap"
-        app:justifyContent="space_between"
-        app:layout_alignSelf="center"
-        app:layout_constraintTop_toBottomOf="@id/timelineboxNoti">
-
-        <ImageButton
-            android:id="@+id/btnMixNoti"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@mipmap/suffle_foreground"/>
-
-        <ImageButton
-            android:id="@+id/btnPreviousNoti"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@mipmap/previous_foreground" />
-
-        <ImageButton
-            android:id="@+id/btnPlayPauseNoti"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            android:background="@mipmap/play_foreground"
-            />
-
-        <ImageButton
-            android:id="@+id/btnNextNoti"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@mipmap/next_foreground" />
-
-        <ImageButton
-            android:id="@+id/btnLoopNoti"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@mipmap/reqeat_foreground"/>
+</com.google.android.flexbox.FlexboxLayout>
 
 
-    </com.google.android.flexbox.FlexboxLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
