@@ -19,6 +19,7 @@
         app:layout_alignSelf="center">
 
         <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/album"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:background="@mipmap/avatar_foreground" />
@@ -39,7 +40,9 @@
                 app:alignItems="center"
                 app:justifyContent="space_between"
                 >
+
                 <TextView
+                    android:id="@+id/songTitle"
                     android:layout_width="230dp"
                     android:layout_height="wrap_content"
                     android:text="Name bai hat"
@@ -57,9 +60,10 @@
             </com.google.android.flexbox.FlexboxLayout>
 
             <TextView
+                android:id="@+id/songArtist"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:text="sample text"
+                android:text="Artist"
                 android:textColor="#000"
                 android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"

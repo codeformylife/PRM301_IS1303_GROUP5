@@ -11,18 +11,22 @@ import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.ComponentName;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -73,7 +77,8 @@ public class MainActivity extends AppCompatActivity {
         searchInput.clearFocus();
         initVariable();
         getSongListOnDevice();
-//        registerReceiver(receiveData, new IntentFilter("musicRequest"));
+
+//      registerReceiver(receiveData, new IntentFilter("musicRequest"));
     }
 
     //check permission when start app
@@ -143,6 +148,31 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (playIntent == null) {
+            playIntent = new Intent(this, SoundService.class);
+            bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
+            startService(playIntent);
+        }
+    }
+
+    private ServiceConnection musicConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            SoundService.MusicBinder binder = (SoundService.MusicBinder) service;
+            soundService = binder.getService();
+            soundService.setList(songListInDevice);
+            musicBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            musicBound = false;
+        }
+    };
 
     private void connectView() {
         songView = findViewById(R.id.listSong);
@@ -215,9 +245,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void getSongListOnDevice() {
         ContentResolver musicResolver = getContentResolver();
-        Uri musicUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        Uri musicUri = android.provider.MediaStore.Audio.Media.INTERNAL_CONTENT_URI;
         Cursor musicCursor = musicResolver.query(musicUri, null, null, null, null);
-
+        Log.e("haha", musicUri.toString());
         if (musicCursor != null && musicCursor.moveToFirst()) {
             //get columns
             int titleColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media.TITLE);

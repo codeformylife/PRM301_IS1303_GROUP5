@@ -32,11 +32,16 @@ public class SoundService extends Service implements MediaPlayer.OnPreparedListe
     public SoundService() {
     }
 
+    public void setList(ArrayList<Song> theSongs) {
+        songs = theSongs;
+    }
+
     public void setDurationSong(int a) {
         if (isPlay) {
             player.seekTo(a);
         }
     }
+
     @Override
     public void onCompletion(MediaPlayer mp) {
 

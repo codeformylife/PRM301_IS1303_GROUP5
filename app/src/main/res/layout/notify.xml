@@ -75,7 +75,7 @@
                     android:background="@mipmap/previous_foreground" />
 
                 <ImageButton
-                    android:id="@+id/btnPlayPauseNoti"
+                    android:id="@+id/playPauseNoti"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:background="@mipmap/play_foreground" />
