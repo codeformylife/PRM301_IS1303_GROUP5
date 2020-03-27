@@ -72,13 +72,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         checkPermission();
-
         connectView();
-        searchInput.clearFocus();
         initVariable();
         getSongListOnDevice();
-
-//      registerReceiver(receiveData, new IntentFilter("musicRequest"));
+        songView.setAdapter(songAdt);
+        SongAdapter songAdt = new SongAdapter(this, songListDisplay);
+    }
+    private void initVariable() {
+        songListInDevice = new ArrayList<>();
+        songListDisplay = new ArrayList<>();
+        searchInput.clearFocus();
     }
 
     //check permission when start app
@@ -100,9 +103,6 @@ public class MainActivity extends AppCompatActivity {
         if (!isHaveEnoughPermission) {
             showConfirmDialog(this, listPermission);
         }
-//        else {
-//            nextActivity();
-//        }
     }
 
     @Override
@@ -113,17 +113,10 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(this, "Không đủ quyền truy cập, ứng dụng tự động thoát", Toast.LENGTH_LONG).show();
                     finish();
                 }
-//                else {
-//                    nextActivity();
-//                }
             }
         }
     }
 
-    // go to main activity if have enough permission
-    public void nextActivity() {
-        startActivity(new Intent(this, MainActivity.class));
-    }
 
     public void showConfirmDialog(final Activity activity, final String[] listPermission) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -177,8 +170,13 @@ public class MainActivity extends AppCompatActivity {
     private void connectView() {
         songView = findViewById(R.id.listSong);
         searchInput = findViewById(R.id.inputSearch);
+        playPause = findViewById(R.id.btnPlayPause);
+        timeLine = findViewById(R.id.timeLine);
+        seekbarHint = findViewById(R.id.timePlay);
+        btnLoop = findViewById(R.id.btnLoop);
+        btnMix = findViewById(R.id.btnMix);
+        songName = findViewById(R.id.songName);
         searchInput.addTextChangedListener(new TextWatcher() {
-
             @Override
             public void afterTextChanged(Editable editable) {
                 String strSearch = editable.toString();
@@ -189,7 +187,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
-
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 String strSearch = searchInput.getText().toString();
@@ -200,7 +197,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String strSearch = searchInput.getText().toString();
@@ -212,8 +208,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        playPause = findViewById(R.id.btnPlayPause);
-        timeLine = findViewById(R.id.timeLine);
+
         this.timeLine.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             // Khi giá trị progress thay đổi.
             @Override
@@ -232,11 +227,6 @@ public class MainActivity extends AppCompatActivity {
                 soundService.setDurationSong(duration);
             }
         });
-
-        seekbarHint = findViewById(R.id.timePlay);
-        btnLoop = findViewById(R.id.btnLoop);
-        btnMix = findViewById(R.id.btnMix);
-        songName = findViewById(R.id.songName);
     }
 
     private boolean containsIgnoreCase(String str, String subString) {
@@ -245,9 +235,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void getSongListOnDevice() {
         ContentResolver musicResolver = getContentResolver();
-        Uri musicUri = android.provider.MediaStore.Audio.Media.INTERNAL_CONTENT_URI;
+        Uri musicUri = MediaStore.Audio.Media.INTERNAL_CONTENT_URI;
         Cursor musicCursor = musicResolver.query(musicUri, null, null, null, null);
-        Log.e("haha", musicUri.toString());
         if (musicCursor != null && musicCursor.moveToFirst()) {
             //get columns
             int titleColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
@@ -283,10 +272,5 @@ public class MainActivity extends AppCompatActivity {
         songView.setAdapter(songAdt);
     }
 
-    private void initVariable() {
-        songListInDevice = new ArrayList<>();
-        songListDisplay = new ArrayList<>();
-        SongAdapter songAdt = new SongAdapter(this, songListDisplay);
-        songView.setAdapter(songAdt);
-    }
+
 }
