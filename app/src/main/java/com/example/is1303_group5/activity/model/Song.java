@@ -7,7 +7,7 @@ public class Song {
     private String thumbnailImage;
     private long duration;
 
-    public Song(long id, String title, String artist, String thumbnailImage, long duration) {
+    public Song(long id, String title, String artist, long duration, String thumbnailImage) {
         this.id = id;
         this.title = title;
         this.artist = artist;
