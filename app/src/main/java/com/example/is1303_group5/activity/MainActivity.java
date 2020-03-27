@@ -10,6 +10,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.song_display_layout);
+        setContentView(R.layout.activity_main);
     }
 }
