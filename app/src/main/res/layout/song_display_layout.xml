@@ -1,45 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.flexbox.FlexboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+
+    >
 
     <com.google.android.flexbox.FlexboxLayout
-        android:id="@+id/item_list"
+        android:id="@+id/item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:padding="10dp"
+        android:background="#ffffff"
         app:alignContent="stretch"
         app:alignItems="center"
         app:flexWrap="wrap"
         app:justifyContent="space_between"
-        app:layout_alignSelf="center"
-        app:layout_constraintTop_toBottomOf="parent">
+        app:layout_alignSelf="center">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="125dp"
-            android:layout_height="125dp"
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:background="@mipmap/avatar_foreground" />
+
         <com.google.android.flexbox.FlexboxLayout
-            android:layout_width="260dp"
-            android:layout_height="125dp"
+            android:layout_width="290dp"
+            android:layout_height="100dp"
             android:padding="10dp"
             app:alignContent="stretch"
-            app:alignItems="center"
+            app:flexDirection="column"
             app:justifyContent="space_between"
-            app:layout_constraintTop_toBottomOf="@id/item_list"
-            app:layout_alignSelf="center"
-            app:flexDirection="column">
+            app:layout_constraintTop_toBottomOf="@id/item">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="125dp"
-                android:layout_height="125dp"
-                android:background="@mipmap/avatar_foreground" />
 
+            <com.google.android.flexbox.FlexboxLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:alignItems="center"
+                app:justifyContent="space_between"
+                >
+                <TextView
+                    android:layout_width="230dp"
+                    android:layout_height="wrap_content"
+                    android:text="Name bai hat"
+                    android:textColor="#000"
+                    android:textSize="23dp"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@mipmap/delete_foreground">
+                </ImageButton>
+            </com.google.android.flexbox.FlexboxLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="sample text"
+                android:textColor="#000"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </com.google.android.flexbox.FlexboxLayout>
 
-
-
     </com.google.android.flexbox.FlexboxLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.flexbox.FlexboxLayout>
+
+
+
