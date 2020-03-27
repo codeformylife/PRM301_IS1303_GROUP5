@@ -75,8 +75,8 @@ public class MainActivity extends AppCompatActivity {
         connectView();
         initVariable();
         getSongListOnDevice();
-        songView.setAdapter(songAdt);
         SongAdapter songAdt = new SongAdapter(this, songListDisplay);
+        songView.setAdapter(songAdt);
     }
     private void initVariable() {
         songListInDevice = new ArrayList<>();
