@@ -1,5 +1,6 @@
 package com.example.is1303_group5.activity;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -10,40 +11,29 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.is1303_group5.R;
+import com.example.is1303_group5.activity.model.Song;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    private ArrayList<Song> songListInDevice;
+    private ArrayList<Song> songListDisplay;
+    private ListView songView;
+    private EditText searchInput;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        checkPermission();
-
-    //check permission when start app
-    private void checkPermission() {
-        String[] listPermission = new String[]{
-                android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                android.Manifest.permission.WAKE_LOCK,
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        boolean isHaveEnoughPermission = true;
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            isHaveEnoughPermission = false;
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WAKE_LOCK) != PackageManager.PERMISSION_GRANTED) {
-            isHaveEnoughPermission = false;
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            isHaveEnoughPermission = false;
-        }
-        if (!isHaveEnoughPermission) {
-            showConfirmDialog(this, listPermission);
-        } else {
-            nextActivity();
-        }
+        checkPermission();
     }
 
     //check permission when start app
@@ -111,4 +101,6 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
+
+
 }
