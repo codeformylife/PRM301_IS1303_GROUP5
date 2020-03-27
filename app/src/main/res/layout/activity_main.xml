@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.MainActivity">
-
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -23,18 +22,17 @@
         android:ems="10"
         android:hint="@string/search"
         android:inputType="textPersonName"
+        android:padding="10dp"
         android:textColor="#ffffff"
         app:layout_constraintEnd_toStartOf="@id/btnSearch"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:padding="10dp"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/btnSearch"
         android:layout_width="51dp"
         android:layout_height="51dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toEndOf="@+id/inputSearch"
         app:layout_constraintTop_toTopOf="parent"
@@ -131,10 +129,12 @@
 
     <ListView
         android:id="@+id/listSong"
-        android:layout_width="403dp"
-        android:layout_height="526dp"
+        android:layout_width="365dp"
+        android:layout_height="500dp"
+        android:layout_marginBottom="35dp"
+        app:layout_constraintBottom_toTopOf="@+id/timeLine"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputSearch" />
+        app:layout_constraintStart_toStartOf="parent">
+    </ListView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
