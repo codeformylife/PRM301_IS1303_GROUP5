@@ -27,7 +27,9 @@
         android:id="@+id/listSong"
         android:layout_width="match_parent"
         android:layout_height="550dp"
+        android:maxHeight="550dp"
         android:padding="10dp"
+        android:scrollbarAlwaysDrawHorizontalTrack="true"
         app:layout_constraintBottom_toTopOf="@id/bottom_bar"
         app:layout_constraintTop_toBottomOf="@id/top_bar">
 
@@ -40,8 +42,8 @@
         layout="@layout/bottom_bar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="parent" />
     <!--end bottom action-->
 
 
