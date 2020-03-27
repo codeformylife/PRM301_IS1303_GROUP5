@@ -26,9 +26,9 @@
     <ListView
         android:id="@+id/listSong"
         android:layout_width="match_parent"
-        android:layout_height="470dp"
+        android:layout_height="420dp"
         android:maxHeight="550dp"
-        android:minHeight="470dp"
+        android:minHeight="420dp"
         android:padding="10dp"
         android:scrollbarAlwaysDrawHorizontalTrack="true"
         app:layout_constraintBottom_toTopOf="@id/bottom_bar"
