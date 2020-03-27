@@ -6,148 +6,43 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.MainActivity">
+    <!--background app-->
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@mipmap/ic_launcher_background" />
+        android:src="@mipmap/background_foreground" />
+    <!--end background app-->
 
-    <com.google.android.flexbox.FlexboxLayout
-        android:id="@+id/flexboxLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        app:alignContent="stretch"
-        app:alignItems="center"
-        app:flexWrap="wrap"
-        app:justifyContent="center"
-        app:layout_alignSelf="center"
-        tools:ignore="MissingConstraints">
+    <!--topbar action-->
+    <include
+        android:id="@+id/top_bar"
+        layout="@layout/top_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+    <!--end topbar action-->
 
-        <EditText
-            android:id="@+id/inputSearch"
-            android:layout_width="270dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="10dp"
-            android:background="@drawable/input_custom"
-            android:ems="10"
-            android:hint="@string/search"
-            android:inputType="textPersonName"
-            android:padding="10dp"
-            android:textColor="#ffffff"
-            app:layout_constraintEnd_toStartOf="@id/btnSearch"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/btnSearch"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="10dp"
-            android:background="@mipmap/search_foreground"
-            app:layout_constraintStart_toEndOf="@+id/inputSearch"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="0dp"
-            android:background="@mipmap/reload_foreground"
-            app:layout_constraintStart_toEndOf="@+id/btnSearch"
-            app:layout_constraintTop_toTopOf="parent" />
-    </com.google.android.flexbox.FlexboxLayout>
-
+    <!--list song-->
     <ListView
         android:id="@+id/listSong"
-        android:layout_width="365dp"
-        android:layout_height="600dp"
-        android:layout_marginBottom="35dp"
-        app:layout_constraintBottom_toTopOf="@+id/timeLine"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/flexboxLayout">
-
+        android:layout_width="match_parent"
+        android:layout_height="550dp"
+        android:padding="10dp"
+        app:layout_constraintBottom_toTopOf="@id/bottom_bar"
+        app:layout_constraintTop_toBottomOf="@id/top_bar">
 
     </ListView>
+    <!--end list song-->
 
-    <SeekBar
-        android:id="@+id/timeLine"
-        android:layout_width="match_parent"
+    <!--bottom action-->
+    <include
+        android:id="@+id/bottom_bar"
+        layout="@layout/bottom_bar"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/btnPlayPause" />
-
-    <ImageButton
-        android:id="@+id/btnMix"
-        android:layout_width="51dp"
-        android:layout_height="51dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginBottom="28dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/ic_shufflent" />
-
-    <ImageButton
-        android:id="@+id/btnPrevious"
-        android:layout_width="51dp"
-        android:layout_height="51dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginBottom="28dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/btnMix"
-        app:srcCompat="@android:drawable/ic_media_previous" />
-
-    <ImageButton
-        android:id="@+id/btnNext"
-        android:layout_width="51dp"
-        android:layout_height="51dp"
-        android:layout_marginStart="35dp"
-        android:layout_marginBottom="28dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btnPlayPause"
-        app:srcCompat="@android:drawable/ic_media_next" />
-
-    <ImageButton
-        android:id="@+id/btnLoop"
-        android:layout_width="51dp"
-        android:layout_height="51dp"
-        android:layout_marginBottom="28dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.681"
-        app:layout_constraintStart_toEndOf="@+id/btnNext"
-        app:srcCompat="@drawable/ic_exchange" />
-
-    <TextView
-        android:id="@+id/timePlay"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/defaultTime"
-        android:textColor="#ffffff"
-        app:layout_constraintBottom_toTopOf="@+id/timeLine"
-        app:layout_constraintStart_toStartOf="parent" />
-
-
-    <TextView
-        android:id="@+id/songName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/timeLine"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <ImageButton
-        android:id="@+id/btnPlayPause"
-        android:layout_width="51dp"
-        android:layout_height="51dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginBottom="28dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/btnPrevious"
-        app:srcCompat="@drawable/ic_play_circle" />
+        android:layout_marginBottom="10dp"/>
+    <!--end bottom action-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
