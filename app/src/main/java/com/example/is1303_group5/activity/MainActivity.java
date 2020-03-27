@@ -22,6 +22,28 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 //        checkPermission();
+
+    //check permission when start app
+    private void checkPermission() {
+        String[] listPermission = new String[]{
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.WAKE_LOCK,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        boolean isHaveEnoughPermission = true;
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            isHaveEnoughPermission = false;
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WAKE_LOCK) != PackageManager.PERMISSION_GRANTED) {
+            isHaveEnoughPermission = false;
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            isHaveEnoughPermission = false;
+        }
+        if (!isHaveEnoughPermission) {
+            showConfirmDialog(this, listPermission);
+        } else {
+            nextActivity();
+        }
     }
 
     //check permission when start app
@@ -88,6 +110,5 @@ public class MainActivity extends AppCompatActivity {
         });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
-
     }
 }
