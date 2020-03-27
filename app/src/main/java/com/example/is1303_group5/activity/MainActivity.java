@@ -75,13 +75,15 @@ public class MainActivity extends AppCompatActivity {
         connectView();
         initVariable();
         getSongListOnDevice();
-        SongAdapter songAdt = new SongAdapter(this, songListDisplay);
-        songView.setAdapter(songAdt);
+
     }
+
     private void initVariable() {
         songListInDevice = new ArrayList<>();
         songListDisplay = new ArrayList<>();
         searchInput.clearFocus();
+        SongAdapter songAdt = new SongAdapter(this, songListDisplay);
+        songView.setAdapter(songAdt);
     }
 
     //check permission when start app
@@ -166,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
             musicBound = false;
         }
     };
+    public String textSearch;
 
     private void connectView() {
         songView = findViewById(R.id.listSong);
@@ -179,36 +182,19 @@ public class MainActivity extends AppCompatActivity {
         searchInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable editable) {
-                String strSearch = editable.toString();
-                songListDisplay.clear();
-                for (Song s : songListInDevice) {
-                    if (containsIgnoreCase(s.getTitle(), strSearch)) {
-                        songListDisplay.add(s);
-                    }
-                }
+                textSearch = editable.toString();
             }
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                String strSearch = searchInput.getText().toString();
-                songListDisplay.clear();
-                for (Song song : songListInDevice) {
-                    if (containsIgnoreCase(song.getTitle(), strSearch)) {
-                        songListDisplay.add(song);
-                    }
-                }
+                textSearch = searchInput.getText().toString();
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String strSearch = searchInput.getText().toString();
-                songListDisplay.clear();
-                for (Song song : songListInDevice) {
-                    if (containsIgnoreCase(song.getTitle(), strSearch)) {
-                        songListDisplay.add(song);
-                    }
-                }
+                textSearch = searchInput.getText().toString();
             }
         });
-
         this.timeLine.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             // Khi giá trị progress thay đổi.
             @Override
@@ -260,15 +246,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void search(View view) {
-        searchInput.clearFocus();
-        String strSearch = searchInput.getText().toString();
         songListDisplay.clear();
         for (Song s : songListInDevice) {
-            if (containsIgnoreCase(s.getTitle(), strSearch)) {
+            if (containsIgnoreCase(s.getTitle(), textSearch)) {
                 songListDisplay.add(s);
             }
         }
         SongAdapter songAdt = new SongAdapter(this, songListDisplay);
+        int temp = songAdt.getCount();
+        if (songAdt.getCount() == 0) {
+            songAdt = new SongAdapter(this, songListInDevice);
+        }
         songView.setAdapter(songAdt);
     }
 

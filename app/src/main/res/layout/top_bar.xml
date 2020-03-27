@@ -34,7 +34,9 @@
         android:layout_marginStart="10dp"
         android:background="@mipmap/search_foreground"
         app:layout_constraintStart_toEndOf="@+id/inputSearch"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:onClick="search"
+        />
 
     <ImageButton
         android:id="@+id/imageButton"
