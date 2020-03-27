@@ -11,5 +11,5 @@
         android:layout_weight="1"
         android:onClick="deleteSong"
         android:text="Xóa bài hát"
-        android:background="#fff"/>
+       />
 </LinearLayout>
