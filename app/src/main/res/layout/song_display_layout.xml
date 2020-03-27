@@ -40,6 +40,7 @@
                 app:justifyContent="space_between"
                 >
                 <TextView
+                    android:id="@+id/songName"
                     android:layout_width="230dp"
                     android:layout_height="wrap_content"
                     android:text="Name bai hat"
@@ -50,6 +51,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageButton
+                    android:id="@+id/delete"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:background="@mipmap/delete_foreground">
@@ -57,6 +59,7 @@
             </com.google.android.flexbox.FlexboxLayout>
 
             <TextView
+                android:id="@+id/duration"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:text="sample text"

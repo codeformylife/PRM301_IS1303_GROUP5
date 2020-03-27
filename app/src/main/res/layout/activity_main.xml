@@ -29,7 +29,6 @@
         android:layout_height="420dp"
         android:maxHeight="550dp"
         android:minHeight="420dp"
-        android:padding="10dp"
         android:scrollbarAlwaysDrawHorizontalTrack="true"
         app:layout_constraintBottom_toTopOf="@id/bottom_bar"
         app:layout_constraintTop_toBottomOf="@id/top_bar">
