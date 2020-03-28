@@ -69,6 +69,11 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton btnPrevious;
     private TextView timePlay;
 
+    private String[] listPermission = new String[]{
+            android.Manifest.permission.READ_EXTERNAL_STORAGE,
+            android.Manifest.permission.WAKE_LOCK,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
 
     private NotificationChannel mChannel;
     String CHANNEL_ID = "my_channel_01";
@@ -86,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
         initVariable();
         if (checkPermission()) {
             getSongListOnDevice();
+        } else {
+            showConfirmDialog(this, listPermission);
         }
     }
 
@@ -99,10 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
     //check permission when start app
     private boolean checkPermission() {
-        String[] listPermission = new String[]{
-                android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                android.Manifest.permission.WAKE_LOCK,
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
         boolean isHaveEnoughPermission = true;
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             isHaveEnoughPermission = false;
@@ -113,9 +117,9 @@ public class MainActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             isHaveEnoughPermission = false;
         }
-        if (!isHaveEnoughPermission) {
-            showConfirmDialog(this, listPermission);
-        }
+//        if (!isHaveEnoughPermission) {
+//            showConfirmDialog(this, listPermission);
+//        }
         return isHaveEnoughPermission;
     }
 
@@ -151,7 +155,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
                 ActivityCompat.requestPermissions(activity, listPermission, 1);
+                while(!checkPermission());
                 getSongListOnDevice();
+                updateList();
             }
         });
         AlertDialog alertDialog = builder.create();
