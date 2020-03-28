@@ -74,6 +74,9 @@ public class MainActivity extends AppCompatActivity {
             android.Manifest.permission.WAKE_LOCK,
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
+    ImageButton playByNotification;
+    TextView nameSongNotification;
+    private NotificationManager notificationManager;
 
     private NotificationChannel mChannel;
     String CHANNEL_ID = "my_channel_01";
@@ -93,6 +96,21 @@ public class MainActivity extends AppCompatActivity {
             getSongListOnDevice();
         } else {
             showConfirmDialog(this, listPermission);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createChannel();
+        }
+    }
+
+    private void createChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(CreateNotification.CHANNEL_ID, "Music Player", NotificationManager.IMPORTANCE_LOW);
+            notificationManager = getSystemService(NotificationManager.class);
+
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
+            }
         }
     }
 
@@ -180,6 +198,8 @@ public class MainActivity extends AppCompatActivity {
         timePlay = findViewById(R.id.timePlay);
         btnNext = findViewById(R.id.btnNext);
         btnPrevious = findViewById(R.id.btnPrevious);
+        playByNotification = findViewById(R.id.btnPlayPauseNoti);
+        nameSongNotification = findViewById(R.id.nameSongNotiTv);
         searchInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable editable) {
@@ -389,6 +409,8 @@ public class MainActivity extends AppCompatActivity {
             timeEnd.setText(formatTime(songListDisplay.get(index).getDuration()));
             btnPlayPause.setBackgroundResource(R.mipmap.pause_foreground);
             updateTimeSong();
+
+            CreateNotification.createNotification(MainActivity.this, songListDisplay.get(index), R.mipmap.ic_launcher, 1, songListDisplay.size() - 1);
         } catch (Exception e) {
             Log.e("play", e.getMessage());
         }

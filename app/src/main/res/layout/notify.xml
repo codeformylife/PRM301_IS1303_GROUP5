@@ -39,6 +39,7 @@
                 app:justifyContent="space_between">
 
                 <TextView
+                    android:id="@+id/nameSongNotiTv"
                     android:layout_width="230dp"
                     android:layout_height="wrap_content"
                     android:text="Name bai hat"
@@ -78,7 +79,8 @@
                     android:id="@+id/btnPlayPauseNoti"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:background="@mipmap/play_foreground" />
+                    android:background="@mipmap/play_foreground"
+                    android:onClick="onPlayAndPause"/>
 
                 <ImageButton
                     android:id="@+id/btnNextNoti"
