@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void createChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            mChannel = new NotificationChannel(CreateNotification.CHANNEL_ID, "Music Player", NotificationManager.IMPORTANCE_LOW);
+            mChannel = new NotificationChannel(CHANNEL_ID, "Music Player", NotificationManager.IMPORTANCE_LOW);
             remoteViews = new RemoteViews(getPackageName(), R.layout.notify);
 
             Notification.MediaStyle style = new Notification.MediaStyle();
@@ -145,25 +145,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private BroadcastReceiver receiveData = new BroadcastReceiver() {
-        @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         public void onReceive(Context context, Intent intent) {
             Bundle bundle = intent.getExtras();
             if (bundle != null) {
-                String name = bundle.getString("name");
-                if (name != null) {
-                    nameSongNotification.setText(name);
-                    remoteViews.setTextViewText(R.id.nameSongNotiTv, name);
-                }
                 String pause = bundle.getString("pause");
                 if (pause != null && pause.equals("request")) {
                     try {
                         onPlayAndPause(null);
-
-
                     } catch (IOException e) {
                         e.printStackTrace();
-                        ;
                     }
                 }
                 String next = bundle.getString("next");
@@ -173,7 +164,6 @@ public class MainActivity extends AppCompatActivity {
                         remoteViews.setTextViewText(R.id.nameSongNotiTv, songListDisplay.get(indexSong).getTitle());
                     } catch (Exception e) {
                         e.printStackTrace();
-                        ;
                     }
                 }
                 String previous = bundle.getString("previous");
@@ -183,7 +173,6 @@ public class MainActivity extends AppCompatActivity {
                         remoteViews.setTextViewText(R.id.nameSongNotiTv, songListDisplay.get(indexSong).getTitle());
                     } catch (Exception e) {
                         e.printStackTrace();
-                        ;
                     }
                 }
             }
