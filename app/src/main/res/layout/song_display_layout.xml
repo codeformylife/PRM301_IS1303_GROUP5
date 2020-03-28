@@ -3,9 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
-
-    >
+    android:onClick="onClickItem"
+    android:padding="10dp">
 
     <com.google.android.flexbox.FlexboxLayout
         android:id="@+id/item"
@@ -30,15 +29,17 @@
             app:alignContent="stretch"
             app:flexDirection="column"
             app:justifyContent="space_between"
-            app:layout_constraintTop_toBottomOf="@id/item">
+            app:layout_constraintTop_toBottomOf="@id/item"
+
+            >
 
 
             <com.google.android.flexbox.FlexboxLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 app:alignItems="center"
-                app:justifyContent="space_between"
-                >
+                app:justifyContent="space_between">
+
                 <TextView
                     android:id="@+id/songName"
                     android:layout_width="230dp"
@@ -54,8 +55,8 @@
                     android:id="@+id/delete"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:background="@mipmap/delete_foreground">
-                </ImageButton>
+                    android:background="@mipmap/delete_foreground"
+                    android:onClick="removeSong"></ImageButton>
             </com.google.android.flexbox.FlexboxLayout>
 
             <TextView

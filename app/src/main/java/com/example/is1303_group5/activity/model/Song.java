@@ -3,24 +3,24 @@ package com.example.is1303_group5.activity.model;
 public class Song {
     private long id;
     private String title;
-    private String artist;
-    private String thumbnailImage;
-    private long duration;
+    private int duration;
+    private String path;
 
-    public Song(long id, String title, String artist, long duration, String thumbnailImage) {
+    @Override
+    public String toString() {
+        return "Song{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", duration=" + duration +
+                ", path='" + path + '\'' +
+                '}';
+    }
+
+    public Song(long id, String title, int duration, String path) {
         this.id = id;
         this.title = title;
-        this.artist = artist;
-        this.thumbnailImage = thumbnailImage;
         this.duration = duration;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
+        this.path = path;
     }
 
     public String getTitle() {
@@ -31,27 +31,27 @@ public class Song {
         this.title = title;
     }
 
-    public String getArtist() {
-        return artist;
-    }
-
-    public void setArtist(String artist) {
-        this.artist = artist;
-    }
-
-    public String getThumbnailImage() {
-        return thumbnailImage;
-    }
-
-    public void setThumbnailImage(String thumbnailImage) {
-        this.thumbnailImage = thumbnailImage;
-    }
-
-    public long getDuration() {
+    public int getDuration() {
         return duration;
     }
 
-    public void setDuration(long duration) {
+    public void setDuration(int duration) {
         this.duration = duration;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }
