@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <TextView
@@ -55,48 +56,61 @@
     </com.google.android.flexbox.FlexboxLayout>
 
     <com.google.android.flexbox.FlexboxLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
-        android:padding="10dp"
-        app:alignContent="stretch"
-        app:alignItems="center"
-        app:flexWrap="wrap"
-        app:justifyContent="space_between"
-        app:layout_alignSelf="center"
-        app:layout_constraintTop_toBottomOf="@id/timelinebox">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            app:alignContent="stretch"
+            app:alignItems="center"
+            app:flexWrap="wrap"
+            app:justifyContent="space_between"
+            app:layout_alignSelf="center"
+            app:layout_constraintTop_toBottomOf="@id/timelinebox"
+            tools:layout_editor_absoluteX="16dp">
 
         <ImageButton
-            android:id="@+id/btnMix"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-           android:background="@mipmap/suffle_foreground"/>
+                android:id="@+id/btnMix"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@mipmap/suffle_foreground"
+                android:alpha="0.3"
+                android:onClick="doMix"
+                tools:layout_editor_absoluteX="10dp"
+                tools:layout_editor_absoluteY="25dp" />
 
         <ImageButton
-            android:id="@+id/btnPrevious"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@mipmap/previous_foreground" />
+                android:id="@+id/btnPrevious"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@mipmap/previous_foreground"
+                android:onClick="doPlayPrevious"
+                tools:layout_editor_absoluteX="85dp"
+                tools:layout_editor_absoluteY="25dp" />
 
         <ImageButton
-            android:id="@+id/btnPlayPause"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            android:background="@mipmap/play_foreground"
-            android:onClick="onPlayAndPause"
-             />
+                android:id="@+id/btnPlayPause"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:background="@mipmap/play_foreground"
+                android:onClick="onPlayAndPause" />
 
         <ImageButton
-            android:id="@+id/btnNext"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@mipmap/next_foreground" />
+                android:id="@+id/btnNext"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@mipmap/next_foreground"
+                android:onClick="doPlayNext"
+                tools:layout_editor_absoluteX="266dp"
+                tools:layout_editor_absoluteY="25dp" />
 
         <ImageButton
-            android:id="@+id/btnLoop"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@mipmap/reqeat_foreground"/>
+                android:id="@+id/btnLoop"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@mipmap/reqeat_foreground"
+                android:onClick="doLoop"
+                android:alpha="0.3"
+                tools:layout_editor_absoluteX="341dp"
+                tools:layout_editor_absoluteY="25dp" />
 
 
     </com.google.android.flexbox.FlexboxLayout>

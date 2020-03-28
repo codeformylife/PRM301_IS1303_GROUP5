@@ -48,6 +48,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     private ArrayList<Song> songListInDevice;
@@ -64,7 +65,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView songName;
     private TextView timeEnd;
     private ImageButton btnPlayPause;
+    private ImageButton btnNext;
+    private ImageButton btnPrevious;
     private TextView timePlay;
+
 
     private NotificationChannel mChannel;
     String CHANNEL_ID = "my_channel_01";
@@ -168,6 +172,8 @@ public class MainActivity extends AppCompatActivity {
         timeEnd = findViewById(R.id.timeEnd);
         btnPlayPause = findViewById(R.id.btnPlayPause);
         timePlay = findViewById(R.id.timePlay);
+        btnNext = findViewById(R.id.btnNext);
+        btnPrevious = findViewById(R.id.btnPrevious);
         searchInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable editable) {
@@ -226,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
                 int duration = musicCursor.getInt(durationColumn);
                 String path = musicCursor.getString(DATA);
                 File file = new File(path);
-                if(file.exists()){
+                if (file.exists()) {
                     songListInDevice.add(new Song(thisId, thisTitle, duration, path));
                     songListDisplay.add(new Song(thisId, thisTitle, duration, path));
                 }
@@ -238,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void search(View view) {
-        indexSong =0;
+        indexSong = 0;
         songListDisplay.clear();
         if (!textSearch.equals("")) {
             for (Song s : songListInDevice) {
@@ -278,7 +284,84 @@ public class MainActivity extends AppCompatActivity {
         } else {
             play(indexSong);
         }
+    }
 
+    Boolean shuffle = false;
+    Boolean loop = false;
+    private Random rand = new Random();
+
+    public void doPlayNext() throws Exception {
+        stop();
+            if(loop){
+                play(indexSong);
+            }else {
+                if (!shuffle) {
+                    indexSong++;
+                    if (indexSong > songListDisplay.size() - 1) {
+                        indexSong = 0;
+                    }
+                    play(indexSong);
+                } else {
+                    int next = 0;
+                    do {
+                        next = rand.nextInt(songListDisplay.size() );
+                    } while (next == indexSong);
+                    indexSong = next;
+                    play(indexSong);
+                }
+            }
+
+
+    }
+    public void doPlayNext(View view) throws Exception {
+        stop();
+
+        if(loop){
+            play(indexSong);
+        }else {
+            if (!shuffle) {
+                indexSong++;
+                if (indexSong > songListDisplay.size() - 1) {
+                    indexSong = 0;
+                }
+                play(indexSong);
+            } else {
+                int next = 0;
+                do {
+                    next = rand.nextInt(songListDisplay.size() );
+                } while (next == indexSong);
+                indexSong = next;
+                play(indexSong);
+            }
+        }
+
+    }
+
+    public void doPlayPrevious(View view) throws Exception {
+        stop();
+        indexSong--;
+        if (indexSong < 0) {
+            indexSong = songListDisplay.size() - 1;
+        }
+        play(indexSong);
+    }
+
+    public void doMix(View view) throws Exception {
+        shuffle = !shuffle;
+        if(shuffle){
+            btnMix.setAlpha(1f);
+        }else {
+            btnMix.setAlpha(0.3f);
+        }
+    }
+
+    public void doLoop(View view) throws Exception {
+        loop = !loop;
+        if(loop){
+            btnLoop.setAlpha(1f);
+        }else {
+            btnLoop.setAlpha(0.3f);
+        }
     }
 
 
@@ -323,6 +406,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (mediaPlayer != null) {
+                    mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mp) {
+                            try {
+                                doPlayNext();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
                     String time = formatTime(mediaPlayer.getCurrentPosition());
                     timePlay.setText(time);
                     timeLine.setMax(songListDisplay.get(indexSong).getDuration());
