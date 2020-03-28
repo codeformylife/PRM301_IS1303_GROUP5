@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showNoti() {
-        remoteViews.setImageViewResource(R.id.btnPlayPauseNoti, R.mipmap.play_foreground);
+        remoteViews.setInt(R.id.btnPlayPauseNoti, "setBackgroundResource", R.mipmap.play_foreground);
         remoteViews.setTextViewText(R.id.nameSongNotiTv, songListInDevice.size() == 0 ? "No Songs" : songListDisplay.get(0).getTitle());
         remoteViews.setOnClickPendingIntent(R.id.btnPlayPauseNoti, onNotiPauseClick(R.id.btnPlayPauseNoti));
         remoteViews.setOnClickPendingIntent(R.id.btnPreviousNoti, onPreviousClick(R.id.btnPreviousNoti));
@@ -162,7 +162,8 @@ public class MainActivity extends AppCompatActivity {
 
 
                     } catch (IOException e) {
-                        e.printStackTrace();;
+                        e.printStackTrace();
+                        ;
                     }
                 }
                 String next = bundle.getString("next");
@@ -171,7 +172,8 @@ public class MainActivity extends AppCompatActivity {
                         doPlayNext(null);
                         remoteViews.setTextViewText(R.id.nameSongNotiTv, songListDisplay.get(indexSong).getTitle());
                     } catch (Exception e) {
-                        e.printStackTrace();;
+                        e.printStackTrace();
+                        ;
                     }
                 }
                 String previous = bundle.getString("previous");
@@ -180,7 +182,8 @@ public class MainActivity extends AppCompatActivity {
                         doPlayPrevious(null);
                         remoteViews.setTextViewText(R.id.nameSongNotiTv, songListDisplay.get(indexSong).getTitle());
                     } catch (Exception e) {
-                        e.printStackTrace();;
+                        e.printStackTrace();
+                        ;
                     }
                 }
             }
@@ -243,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
                 ActivityCompat.requestPermissions(activity, listPermission, 1);
-                while(!checkPermission());
+                while (!checkPermission()) ;
                 getSongListOnDevice();
                 updateList();
             }
@@ -386,33 +389,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void doPlayNext() throws Exception {
         stop();
-            if(loop){
-                play(indexSong);
-            }else {
-                if (!shuffle) {
-                    indexSong++;
-                    if (indexSong > songListDisplay.size() - 1) {
-                        indexSong = 0;
-                    }
-                    play(indexSong);
-                } else {
-                    int next = 0;
-                    do {
-                        next = rand.nextInt(songListDisplay.size() );
-                    } while (next == indexSong);
-                    indexSong = next;
-                    play(indexSong);
-                }
-            }
-
-
-    }
-    public void doPlayNext(View view) throws Exception {
-        stop();
-
-        if(loop){
+        if (loop) {
             play(indexSong);
-        }else {
+        } else {
             if (!shuffle) {
                 indexSong++;
                 if (indexSong > songListDisplay.size() - 1) {
@@ -422,7 +401,32 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 int next = 0;
                 do {
-                    next = rand.nextInt(songListDisplay.size() );
+                    next = rand.nextInt(songListDisplay.size());
+                } while (next == indexSong);
+                indexSong = next;
+                play(indexSong);
+            }
+        }
+
+
+    }
+
+    public void doPlayNext(View view) throws Exception {
+        stop();
+
+        if (loop) {
+            play(indexSong);
+        } else {
+            if (!shuffle) {
+                indexSong++;
+                if (indexSong > songListDisplay.size() - 1) {
+                    indexSong = 0;
+                }
+                play(indexSong);
+            } else {
+                int next = 0;
+                do {
+                    next = rand.nextInt(songListDisplay.size());
                 } while (next == indexSong);
                 indexSong = next;
                 play(indexSong);
@@ -442,18 +446,18 @@ public class MainActivity extends AppCompatActivity {
 
     public void doMix(View view) throws Exception {
         shuffle = !shuffle;
-        if(shuffle){
+        if (shuffle) {
             btnMix.setAlpha(1f);
-        }else {
+        } else {
             btnMix.setAlpha(0.3f);
         }
     }
 
     public void doLoop(View view) throws Exception {
         loop = !loop;
-        if(loop){
+        if (loop) {
             btnLoop.setAlpha(1f);
-        }else {
+        } else {
             btnLoop.setAlpha(0.3f);
         }
     }
@@ -479,7 +483,7 @@ public class MainActivity extends AppCompatActivity {
             updateTimeSong();
 
             remoteViews.setTextViewText(R.id.nameSongNotiTv, songListDisplay.get(indexSong).getTitle());
-            remoteViews.setImageViewResource(R.id.btnPlayPauseNoti, R.mipmap.pause_foreground);
+            remoteViews.setInt(R.id.btnPlayPauseNoti, "setBackgroundResource", R.mipmap.pause_foreground);
             mNotificationManager.notify(1, notification);
         } catch (Exception e) {
             Log.e("play", e.getMessage());
@@ -490,7 +494,7 @@ public class MainActivity extends AppCompatActivity {
     public void stop() {
         if (mediaPlayer != null) {
             btnPlayPause.setBackgroundResource(R.mipmap.play_foreground);
-            remoteViews.setImageViewResource(R.id.btnPlayPauseNoti, R.mipmap.play_foreground);
+            remoteViews.setInt(R.id.btnPlayPauseNoti, "setBackgroundResource", R.mipmap.play_foreground);
             mediaPlayer.stop();
             mediaPlayer.release();
             mediaPlayer = null;
