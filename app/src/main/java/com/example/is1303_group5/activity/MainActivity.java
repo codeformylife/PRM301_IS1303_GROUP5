@@ -3,6 +3,7 @@ package com.example.is1303_group5.activity;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
@@ -74,9 +75,11 @@ public class MainActivity extends AppCompatActivity {
             android.Manifest.permission.WAKE_LOCK,
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
+    ImageButton playByNotification;
+    TextView nameSongNotification;
 
     private NotificationChannel mChannel;
-    String CHANNEL_ID = "my_channel_01";
+    String CHANNEL_ID = "IS1303_GROUP5";
     RemoteViews remoteViews;
     Notification notification;
     NotificationManager mNotificationManager;
@@ -93,6 +96,28 @@ public class MainActivity extends AppCompatActivity {
             getSongListOnDevice();
         } else {
             showConfirmDialog(this, listPermission);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createChannel();
+        }
+    }
+
+    private void createChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mChannel = new NotificationChannel(CreateNotification.CHANNEL_ID, "Music Player", NotificationManager.IMPORTANCE_LOW);
+            remoteViews = new RemoteViews(getPackageName(), R.layout.notify);
+
+            Notification.MediaStyle style = new Notification.MediaStyle();
+            Notification.Builder builder = new Notification.Builder(this)
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setCustomContentView(remoteViews)
+                    .setCustomBigContentView(remoteViews)
+                    .setStyle(style)
+                    .setChannelId(CHANNEL_ID)
+                    .setOngoing(true);
+
+//            NotificationManagerCompat.from(this).notify(1, builder.build());
         }
     }
 
@@ -180,6 +205,8 @@ public class MainActivity extends AppCompatActivity {
         timePlay = findViewById(R.id.timePlay);
         btnNext = findViewById(R.id.btnNext);
         btnPrevious = findViewById(R.id.btnPrevious);
+        playByNotification = findViewById(R.id.btnPlayPauseNoti);
+        nameSongNotification = findViewById(R.id.nameSongNotiTv);
         searchInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable editable) {
@@ -389,6 +416,8 @@ public class MainActivity extends AppCompatActivity {
             timeEnd.setText(formatTime(songListDisplay.get(index).getDuration()));
             btnPlayPause.setBackgroundResource(R.mipmap.pause_foreground);
             updateTimeSong();
+
+//            CreateNotification.createNotification(MainActivity.this, songListDisplay.get(index), R.mipmap.ic_launcher, 1, songListDisplay.size() - 1);
         } catch (Exception e) {
             Log.e("play", e.getMessage());
         }

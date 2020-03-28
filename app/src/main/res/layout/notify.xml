@@ -1,103 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.flexbox.FlexboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="wrap_content"
-    android:padding="10dp"
-
-    >
-
-    <com.google.android.flexbox.FlexboxLayout
-        android:id="@+id/item"
+    android:gravity="center"
+    android:padding="10dp">
+    <TextView
+        android:id="@+id/nameSongNotiTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#ffffff"
-        app:alignContent="stretch"
-        app:alignItems="center"
-        app:flexWrap="wrap"
-        app:justifyContent="space_between"
-        app:layout_alignSelf="center">
+        android:text="Name bai hat"
+        android:textColor="#000"
+        android:textSize="23dp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:background="@mipmap/avatar_foreground" />
-
-        <com.google.android.flexbox.FlexboxLayout
-            android:layout_width="290dp"
-            android:layout_height="100dp"
-            android:padding="10dp"
-            app:alignContent="stretch"
-            app:flexDirection="column"
-            app:justifyContent="space_between"
-            app:layout_constraintTop_toBottomOf="@id/item">
-
-            <com.google.android.flexbox.FlexboxLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                app:alignItems="center"
-                app:justifyContent="space_between">
-
-                <TextView
-                    android:layout_width="230dp"
-                    android:layout_height="wrap_content"
-                    android:text="Name bai hat"
-                    android:textColor="#000"
-                    android:textSize="23dp"
-                    android:textStyle="bold"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageButton
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:background="@mipmap/delete_foreground"></ImageButton>
-            </com.google.android.flexbox.FlexboxLayout>
-
-            <com.google.android.flexbox.FlexboxLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:alignContent="stretch"
-                app:alignItems="center"
-                app:flexWrap="wrap"
-                app:justifyContent="space_between"
-                app:layout_alignSelf="center">
-                <ImageButton
-                    android:id="@+id/btnMixNoti"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@mipmap/suffle_foreground" />
-
-                <ImageButton
-                    android:id="@+id/btnPreviousNoti"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@mipmap/previous_foreground" />
-
-                <ImageButton
-                    android:id="@+id/btnPlayPauseNoti"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:background="@mipmap/play_foreground" />
-
-                <ImageButton
-                    android:id="@+id/btnNextNoti"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@mipmap/next_foreground" />
-
-                <ImageButton
-                    android:id="@+id/btnLoopNoti"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@mipmap/reqeat_foreground" />
+    <LinearLayout
+        android:id="@+id/action"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:gravity="center"
+       >
 
 
-            </com.google.android.flexbox.FlexboxLayout>
-        </com.google.android.flexbox.FlexboxLayout>
 
-    </com.google.android.flexbox.FlexboxLayout>
-</com.google.android.flexbox.FlexboxLayout>
+        <ImageButton
+            android:id="@+id/btnPreviousNoti"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@mipmap/previous_foreground"
+           />
+
+        <ImageButton
+            android:id="@+id/btnPlayPauseNoti"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@mipmap/play_foreground"
+          />
+
+        <ImageButton
+            android:id="@+id/btnNextNoti"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@mipmap/next_foreground"
+         />
+
+
+    </LinearLayout>
+</LinearLayout>
+
 
 
 
