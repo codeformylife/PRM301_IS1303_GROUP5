@@ -3,6 +3,7 @@ package com.example.is1303_group5.activity;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
@@ -76,10 +77,9 @@ public class MainActivity extends AppCompatActivity {
 
     ImageButton playByNotification;
     TextView nameSongNotification;
-    private NotificationManager notificationManager;
 
     private NotificationChannel mChannel;
-    String CHANNEL_ID = "my_channel_01";
+    String CHANNEL_ID = "IS1303_GROUP5";
     RemoteViews remoteViews;
     Notification notification;
     NotificationManager mNotificationManager;
@@ -105,12 +105,19 @@ public class MainActivity extends AppCompatActivity {
 
     private void createChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(CreateNotification.CHANNEL_ID, "Music Player", NotificationManager.IMPORTANCE_LOW);
-            notificationManager = getSystemService(NotificationManager.class);
+            mChannel = new NotificationChannel(CreateNotification.CHANNEL_ID, "Music Player", NotificationManager.IMPORTANCE_LOW);
+            remoteViews = new RemoteViews(getPackageName(), R.layout.notify);
 
-            if (notificationManager != null) {
-                notificationManager.createNotificationChannel(channel);
-            }
+            Notification.MediaStyle style = new Notification.MediaStyle();
+            Notification.Builder builder = new Notification.Builder(this)
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setCustomContentView(remoteViews)
+                    .setCustomBigContentView(remoteViews)
+                    .setStyle(style)
+                    .setChannelId(CHANNEL_ID)
+                    .setOngoing(true);
+
+//            NotificationManagerCompat.from(this).notify(1, builder.build());
         }
     }
 
@@ -410,7 +417,7 @@ public class MainActivity extends AppCompatActivity {
             btnPlayPause.setBackgroundResource(R.mipmap.pause_foreground);
             updateTimeSong();
 
-            CreateNotification.createNotification(MainActivity.this, songListDisplay.get(index), R.mipmap.ic_launcher, 1, songListDisplay.size() - 1);
+//            CreateNotification.createNotification(MainActivity.this, songListDisplay.get(index), R.mipmap.ic_launcher, 1, songListDisplay.size() - 1);
         } catch (Exception e) {
             Log.e("play", e.getMessage());
         }
