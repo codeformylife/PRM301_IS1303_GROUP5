@@ -78,23 +78,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        checkPermission();
         connectView();
         initVariable();
-        getSongListOnDevice();
-        updateList();
+        if (checkPermission()) {
+            getSongListOnDevice();
+        }
     }
 
     private void initVariable() {
-        songListInDevice = new ArrayList<>();
         songListDisplay = new ArrayList<>();
+        songListInDevice = new ArrayList<>();
         searchInput.clearFocus();
         SongAdapter songAdt = new SongAdapter(this, songListDisplay);
         songView.setAdapter(songAdt);
     }
 
     //check permission when start app
-    private void checkPermission() {
+    private boolean checkPermission() {
         String[] listPermission = new String[]{
                 android.Manifest.permission.READ_EXTERNAL_STORAGE,
                 android.Manifest.permission.WAKE_LOCK,
@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         if (!isHaveEnoughPermission) {
             showConfirmDialog(this, listPermission);
         }
-        Log.e("haha",isHaveEnoughPermission+"");
+        return isHaveEnoughPermission;
     }
 
     @Override
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void showConfirmDialog(final Activity activity, final String[] listPermission) {
-        Log.e("haha","hád");
+        Log.e("haha", "hád");
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Xác nhận");
         builder.setMessage("Ứng dụng cần một số quyền để có thể tiếp tục, bạn có muốn tiếp tục?");
@@ -147,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
                 ActivityCompat.requestPermissions(activity, listPermission, 1);
+                getSongListOnDevice();
             }
         });
         AlertDialog alertDialog = builder.create();
@@ -210,12 +211,12 @@ public class MainActivity extends AppCompatActivity {
     public void getSongListOnDevice() {
         ContentResolver musicResolver = getContentResolver();
         Uri musicUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        Cursor musicCursor = musicResolver.query(musicUri, null, null, null, null);
+        String selection = MediaStore.Audio.Media.IS_MUSIC;
+        Cursor musicCursor = musicResolver.query(musicUri, null, selection, null, null);
         if (musicCursor != null && musicCursor.moveToFirst()) {
             //get columns
             int titleColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
             int idColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media._ID);
-            int artistColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
             int durationColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media.DURATION);
             int DATA = musicCursor.getColumnIndex(MediaStore.Audio.Media.DATA);
             //add songs to list
@@ -224,35 +225,41 @@ public class MainActivity extends AppCompatActivity {
                 String thisTitle = musicCursor.getString(titleColumn);
                 int duration = musicCursor.getInt(durationColumn);
                 String path = musicCursor.getString(DATA);
-                songListInDevice.add(new Song(thisId, thisTitle, duration, path));
-                songListDisplay.add(new Song(thisId, thisTitle, duration, path));
+                File file = new File(path);
+                if(file.exists()){
+                    songListInDevice.add(new Song(thisId, thisTitle, duration, path));
+                    songListDisplay.add(new Song(thisId, thisTitle, duration, path));
+                }
             }
             while (musicCursor.moveToNext());
         }
         musicCursor.close();
+
     }
 
     public void search(View view) {
+        indexSong =0;
         songListDisplay.clear();
-        for (Song s : songListInDevice) {
-            if (containsIgnoreCase(s.getTitle(), textSearch)) {
-                songListDisplay.add(s);
+        if (!textSearch.equals("")) {
+            for (Song s : songListInDevice) {
+                if (containsIgnoreCase(s.getTitle(), textSearch)) {
+                    songListDisplay.add(s);
+                }
             }
         }
         SongAdapter songAdt = new SongAdapter(this, songListDisplay);
-
-
         if (songAdt.getCount() == 0) {
             songAdt = new SongAdapter(this, songListInDevice);
         }
         songView.setAdapter(songAdt);
     }
 
+    public void uploadList(View view) {
+        updateList();
+    }
+
     void updateList() {
-        Log.e("haha", "load");
-        songListDisplay.clear();
-        songListDisplay = songListInDevice;
-        SongAdapter songAdt = new SongAdapter(this, songListDisplay);
+        SongAdapter songAdt = new SongAdapter(this, songListInDevice);
         songView.setAdapter(songAdt);
     }
 
@@ -335,29 +342,31 @@ public class MainActivity extends AppCompatActivity {
 
     public void removeSong(View view) {
         final File file = new File(songListDisplay.get(indexSong).getPath());
-//        if (file.exists()) {
-//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//            builder.setTitle("Remove!");
-//            builder.setMessage("Bạn muốn xóa bài " + file.getName() + "?");
-//            builder.setCancelable(true);
-//            builder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    if (file.delete()) {
-//                        Toast.makeText(getApplicationContext(), "Deleted", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//            });
-//            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    dialog.cancel();
-//                }
-//            });
-//            builder.show();
-//        }
-        getSongListOnDevice();
-        updateList();
+        if (file.exists()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Remove!");
+            builder.setMessage("Bạn muốn xóa bài " + file.getName() + "?");
+            builder.setCancelable(true);
+            builder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (file.delete()) {
+                        Toast.makeText(getApplicationContext(), "Deleted", Toast.LENGTH_SHORT).show();
+                        songListInDevice.clear();
+                        getSongListOnDevice();
+                        updateList();
+                    }
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            builder.show();
+        }
+
 
     }
 

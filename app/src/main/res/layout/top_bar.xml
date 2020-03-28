@@ -45,5 +45,7 @@
         android:layout_marginStart="0dp"
         android:background="@mipmap/reload_foreground"
         app:layout_constraintStart_toEndOf="@+id/btnSearch"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:onClick="uploadList"
+        />
 </com.google.android.flexbox.FlexboxLayout>
