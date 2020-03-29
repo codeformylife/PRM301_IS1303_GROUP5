@@ -1,11 +1,13 @@
 package com.example.is1303_group5.activity;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -13,18 +15,16 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.Editable;
@@ -45,10 +45,7 @@ import com.example.is1303_group5.activity.model.Song;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -56,18 +53,12 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Song> songListDisplay;
     private ListView songView;
     private EditText searchInput;
-    private ImageButton playPause;
     private SeekBar timeLine;
-    private TextView seekbarHint;
-    private boolean isLoop = true;
-    private boolean isMix = false;
     private ImageButton btnLoop;
     private ImageButton btnMix;
     private TextView songName;
     private TextView timeEnd;
     private ImageButton btnPlayPause;
-    private ImageButton btnNext;
-    private ImageButton btnPrevious;
     private TextView timePlay;
 
     private String[] listPermission = new String[]{
@@ -98,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
             showConfirmDialog(this, listPermission);
         }
 
+        registerReceiver(receiveData, new IntentFilter("musicRequest"));
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createChannel();
         }
@@ -105,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void createChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            mChannel = new NotificationChannel(CreateNotification.CHANNEL_ID, "Music Player", NotificationManager.IMPORTANCE_LOW);
+            mChannel = new NotificationChannel(CHANNEL_ID, "Music Player", NotificationManager.IMPORTANCE_LOW);
             remoteViews = new RemoteViews(getPackageName(), R.layout.notify);
 
             Notification.MediaStyle style = new Notification.MediaStyle();
@@ -117,9 +110,74 @@ public class MainActivity extends AppCompatActivity {
                     .setChannelId(CHANNEL_ID)
                     .setOngoing(true);
 
-//            NotificationManagerCompat.from(this).notify(1, builder.build());
+            notification = builder.build();
+            mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.createNotificationChannel(mChannel);
+            showNoti();
         }
     }
+
+    private void showNoti() {
+        remoteViews.setInt(R.id.btnPlayPauseNoti, "setBackgroundResource", R.mipmap.play_foreground);
+        remoteViews.setTextViewText(R.id.nameSongNotiTv, songListInDevice.size() == 0 ? "No Songs" : songListDisplay.get(0).getTitle());
+        remoteViews.setOnClickPendingIntent(R.id.btnPlayPauseNoti, onNotiPauseClick(R.id.btnPlayPauseNoti));
+        remoteViews.setOnClickPendingIntent(R.id.btnPreviousNoti, onPreviousClick(R.id.btnPreviousNoti));
+        remoteViews.setOnClickPendingIntent(R.id.btnNextNoti, onNextClick(R.id.btnNextNoti));
+        mNotificationManager.notify(1, notification);
+    }
+
+    private PendingIntent onNotiPauseClick(@IdRes int id) {
+        Intent intent = new Intent("musicRequest");
+        intent.putExtra("pause", "request");
+        return PendingIntent.getBroadcast(this, id, intent, 0);
+    }
+
+    private PendingIntent onNextClick(@IdRes int id) {
+        Intent intent = new Intent("musicRequest");
+        intent.putExtra("next", "request");
+        return PendingIntent.getBroadcast(this, id, intent, 0);
+    }
+
+    private PendingIntent onPreviousClick(@IdRes int id) {
+        Intent intent = new Intent("musicRequest");
+        intent.putExtra("previous", "request");
+        return PendingIntent.getBroadcast(this, id, intent, 0);
+    }
+
+    private BroadcastReceiver receiveData = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            if (bundle != null) {
+                String pause = bundle.getString("pause");
+                if (pause != null && pause.equals("request")) {
+                    try {
+                        onPlayAndPause(null);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                String next = bundle.getString("next");
+                if (next != null && next.equals("request")) {
+                    try {
+                        doPlayNext(null);
+                        remoteViews.setTextViewText(R.id.nameSongNotiTv, songListDisplay.get(indexSong).getTitle());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                String previous = bundle.getString("previous");
+                if (previous != null && previous.equals("request")) {
+                    try {
+                        doPlayPrevious(null);
+                        remoteViews.setTextViewText(R.id.nameSongNotiTv, songListDisplay.get(indexSong).getTitle());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    };
 
     private void initVariable() {
         songListDisplay = new ArrayList<>();
@@ -142,9 +200,7 @@ public class MainActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             isHaveEnoughPermission = false;
         }
-//        if (!isHaveEnoughPermission) {
-//            showConfirmDialog(this, listPermission);
-//        }
+
         return isHaveEnoughPermission;
     }
 
@@ -162,7 +218,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void showConfirmDialog(final Activity activity, final String[] listPermission) {
-        Log.e("haha", "hád");
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Xác nhận");
         builder.setMessage("Ứng dụng cần một số quyền để có thể tiếp tục, bạn có muốn tiếp tục?");
@@ -180,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
                 ActivityCompat.requestPermissions(activity, listPermission, 1);
-                while(!checkPermission());
+                while (!checkPermission()) ;
                 getSongListOnDevice();
                 updateList();
             }
@@ -194,17 +249,13 @@ public class MainActivity extends AppCompatActivity {
     private void connectView() {
         songView = findViewById(R.id.listSong);
         searchInput = findViewById(R.id.inputSearch);
-        playPause = findViewById(R.id.btnPlayPause);
         timeLine = findViewById(R.id.timeLine);
-        seekbarHint = findViewById(R.id.timePlay);
         btnLoop = findViewById(R.id.btnLoop);
         btnMix = findViewById(R.id.btnMix);
         songName = findViewById(R.id.songName);
         timeEnd = findViewById(R.id.timeEnd);
         btnPlayPause = findViewById(R.id.btnPlayPause);
         timePlay = findViewById(R.id.timePlay);
-        btnNext = findViewById(R.id.btnNext);
-        btnPrevious = findViewById(R.id.btnPrevious);
         playByNotification = findViewById(R.id.btnPlayPauseNoti);
         nameSongNotification = findViewById(R.id.nameSongNotiTv);
         searchInput.addTextChangedListener(new TextWatcher() {
@@ -307,8 +358,8 @@ public class MainActivity extends AppCompatActivity {
     public void onClickItem(View view) throws IOException {
         stop();
         indexSong = Integer.parseInt(view.getTag().toString());
-        Log.e("haha", indexSong + "");
         play(indexSong);
+        mNotificationManager.notify(1, notification);
     }
 
     public void onPlayAndPause(View view) throws IOException {
@@ -317,6 +368,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             play(indexSong);
         }
+
+
     }
 
     Boolean shuffle = false;
@@ -325,33 +378,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void doPlayNext() throws Exception {
         stop();
-            if(loop){
-                play(indexSong);
-            }else {
-                if (!shuffle) {
-                    indexSong++;
-                    if (indexSong > songListDisplay.size() - 1) {
-                        indexSong = 0;
-                    }
-                    play(indexSong);
-                } else {
-                    int next = 0;
-                    do {
-                        next = rand.nextInt(songListDisplay.size() );
-                    } while (next == indexSong);
-                    indexSong = next;
-                    play(indexSong);
-                }
-            }
-
-
-    }
-    public void doPlayNext(View view) throws Exception {
-        stop();
-
-        if(loop){
+        if (loop) {
             play(indexSong);
-        }else {
+        } else {
             if (!shuffle) {
                 indexSong++;
                 if (indexSong > songListDisplay.size() - 1) {
@@ -361,7 +390,32 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 int next = 0;
                 do {
-                    next = rand.nextInt(songListDisplay.size() );
+                    next = rand.nextInt(songListDisplay.size());
+                } while (next == indexSong);
+                indexSong = next;
+                play(indexSong);
+            }
+        }
+
+
+    }
+
+    public void doPlayNext(View view) throws Exception {
+        stop();
+
+        if (loop) {
+            play(indexSong);
+        } else {
+            if (!shuffle) {
+                indexSong++;
+                if (indexSong > songListDisplay.size() - 1) {
+                    indexSong = 0;
+                }
+                play(indexSong);
+            } else {
+                int next = 0;
+                do {
+                    next = rand.nextInt(songListDisplay.size());
                 } while (next == indexSong);
                 indexSong = next;
                 play(indexSong);
@@ -381,18 +435,18 @@ public class MainActivity extends AppCompatActivity {
 
     public void doMix(View view) throws Exception {
         shuffle = !shuffle;
-        if(shuffle){
+        if (shuffle) {
             btnMix.setAlpha(1f);
-        }else {
+        } else {
             btnMix.setAlpha(0.3f);
         }
     }
 
     public void doLoop(View view) throws Exception {
         loop = !loop;
-        if(loop){
+        if (loop) {
             btnLoop.setAlpha(1f);
-        }else {
+        } else {
             btnLoop.setAlpha(0.3f);
         }
     }
@@ -417,7 +471,9 @@ public class MainActivity extends AppCompatActivity {
             btnPlayPause.setBackgroundResource(R.mipmap.pause_foreground);
             updateTimeSong();
 
-//            CreateNotification.createNotification(MainActivity.this, songListDisplay.get(index), R.mipmap.ic_launcher, 1, songListDisplay.size() - 1);
+            remoteViews.setTextViewText(R.id.nameSongNotiTv, songListDisplay.get(indexSong).getTitle());
+            remoteViews.setInt(R.id.btnPlayPauseNoti, "setBackgroundResource", R.mipmap.pause_foreground);
+            mNotificationManager.notify(1, notification);
         } catch (Exception e) {
             Log.e("play", e.getMessage());
         }
@@ -427,9 +483,12 @@ public class MainActivity extends AppCompatActivity {
     public void stop() {
         if (mediaPlayer != null) {
             btnPlayPause.setBackgroundResource(R.mipmap.play_foreground);
+            remoteViews.setInt(R.id.btnPlayPauseNoti, "setBackgroundResource", R.mipmap.play_foreground);
             mediaPlayer.stop();
             mediaPlayer.release();
             mediaPlayer = null;
+
+            mNotificationManager.notify(1, notification);
         }
     }
 
