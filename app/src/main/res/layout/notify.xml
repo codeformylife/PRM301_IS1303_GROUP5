@@ -5,13 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="25dp">
+  >
 
     <TextView
         android:id="@+id/nameSongNotiTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
         android:text="Name bai hat"
         android:textColor="#000"
         android:textSize="23dp"
